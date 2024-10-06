@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Shirt Designer</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      // Set up scene, camera, and renderer
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1100
+      );
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Create a basic shirt shape (simplified as a cylinder for this example)
+      const geometry = new THREE.BoxGeometry(2, 2, 1);
+      const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const shirt = new THREE.Mesh(geometry, material);
+      scene.add(shirt);
+
+      camera.position.z = 5;
+
+      // Simple rotation animation
+      function animate() {
+        requestAnimationFrame(animate);
+        shirt.rotation.y += 0.01;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Basic color change function
+      window.changeShirtColor = function (color) {
+        shirt.material.color.setHex(color);
+      };
+
+      // Handle window resizing
+      window.addEventListener(
+        "resize",
+        function () {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        },
+        false
+      );
+    </script>
+
+    <!-- Basic color controls -->
+    <div style="position: absolute; top: 10px; left: 10px">
+      <button onclick="changeShirtColor(0xff0000)">Red</button>
+      <button onclick="changeShirtColor(0x00ff00)">Green</button>
+      <button onclick="changeShirtColor(0x0000ff)">Blue</button>
+    </div>
+  </body>
+</html>
